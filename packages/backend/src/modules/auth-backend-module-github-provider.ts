@@ -6,7 +6,7 @@ import {
   createOAuthProviderFactory,
 } from '@backstage/plugin-auth-node';
 
-export const PluginAuthBackendModuleGithubProvider = createBackendModule({
+export const AuthBackendModuleGithubProvider = createBackendModule({
   // This ID must be exactly "auth" because that's the plugin it targets
   pluginId: 'auth',
   // This ID must be unique, but can be anything
