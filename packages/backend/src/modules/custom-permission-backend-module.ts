@@ -33,6 +33,8 @@ class CustomPermissionPolicy implements PermissionPolicy {
   ): Promise<PolicyDecision> {
     /**
      * Allows only resources that were created by the respective user to be deleted
+     *
+     * @see https://backstage.io/docs/permissions/writing-a-policy#conditional-decisions
      */
     if (isPermission(request.permission, catalogEntityDeletePermission)) {
       return createCatalogConditionalDecision(
@@ -44,6 +46,23 @@ class CustomPermissionPolicy implements PermissionPolicy {
     }
 
     /**
+     * The code below checks resource-level permissions, that is, whether the user can view, delete or take any other action.
+     * Uncomment to check the behavior.
+     *
+     * Note: import isResourcePermission from @backstage/plugin-permission-common package
+     *
+     * @see https://backstage.io/docs/permissions/writing-a-policy#resource-types
+     */
+    // if (isResourcePermission(request.permission, 'catalog-entity')) {
+    //   return createCatalogConditionalDecision(
+    //     request.permission,
+    //     catalogConditions.isEntityOwner({
+    //       claims: user?.identity.ownershipEntityRefs ?? [],
+    //     }),
+    //   );
+    // }
+
+    /**
      * Removes "Register Existing Component" button from /create and returns 404 on /catalog-import
      */
     if (request.permission.name === catalogEntityCreatePermission.name) {
@@ -52,6 +71,9 @@ class CustomPermissionPolicy implements PermissionPolicy {
       };
     }
 
+    /**
+     * By default, allow anything outside of the policy
+     */
     return {
       result: AuthorizeResult.ALLOW,
     };
